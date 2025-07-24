@@ -1,0 +1,37 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Docker
+**/Dockerfile
+**/docker-compose.yml
+
+# Env and secret files
+.env
+secrets.json
+
+# Test results
+TestResults/
+*.trx
+
+# Other
+*.db
+*.pdb
+*.tmp
+*.bak
