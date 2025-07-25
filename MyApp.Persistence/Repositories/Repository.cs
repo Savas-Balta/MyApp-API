@@ -5,6 +5,7 @@ using MyApp.Persistence.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace MyApp.Persistence.Repositories
         public Task<List<T>> GetAllAsync()
         {
             return context.Set<T>().ToListAsync();
+        }
+
+        public async Task<T?> GetByFilterAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
         public async Task<T> GetByIdAsync(int id)

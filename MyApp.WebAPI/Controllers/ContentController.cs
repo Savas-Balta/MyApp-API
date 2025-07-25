@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Application.Features.CQRS.Commands.Content;
+using MyApp.Application.Features.CQRS.Commands.ContentVoteCommands;
 using MyApp.Application.Features.CQRS.Queries.Content;
 
 namespace MyApp.WebAPI.Controllers
@@ -54,5 +55,7 @@ namespace MyApp.WebAPI.Controllers
             await _mediator.Send(new RemoveContentCommand(id));
             return Ok(new { message = "Content deleted successfully" });
         }
+
+        
     }
 }

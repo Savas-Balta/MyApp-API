@@ -15,5 +15,6 @@ namespace MyApp.Domain.Entities
         public string Role { get; set; } = "User"; 
 
         public ICollection<Content>? Contents { get; set; }
+        public ICollection<ContentVote>? Votes { get; set; }
     }
 }

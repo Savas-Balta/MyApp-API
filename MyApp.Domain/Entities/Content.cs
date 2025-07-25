@@ -20,5 +20,8 @@ namespace MyApp.Domain.Entities
 
         public User? User { get; set; }
         public Category? Category { get; set; }
+
+        public ICollection<ContentVote>? Votes { get; set; }
+
     }
 }
