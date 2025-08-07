@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Benim İçeriklerim</h2>
+
+  <table class="table table-bordered table-hover">
+    <thead class="table-secondary text-center">
+      <tr>
+        <th>ID</th>
+        <th>Başlık</th>
+        <th>Açıklama</th>
+        <th>Kategori</th>
+        <th>Oluşturulma</th>
+        <th>Like/Dislike</th>
+        <th>İşlemler</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of contents; track c.id) {
+      <tr>
+        <td>{{ c.id }}</td>
+        <td class="desc-cell" title="{{ c.title }}">
+          {{ c.title }}
+        </td>
+        <td class="desc-cell" title="{{ c.body }}">
+          {{ c.body }}
+        </td>
+        <td>{{ c.categoryName }}</td>
+        <td>{{ c.createdAt | date: 'short' }}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-success me-2" (click)="vote(c.id, true)">
+            👍 {{ c.likeCount }}
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="vote(c.id, false)">
+            👎 {{ c.dislikeCount }}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-warning btn-sm me-2" (click)="editContent(c.id)">Düzenle</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteContent(c.id)">Sil</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

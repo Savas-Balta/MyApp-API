@@ -1,0 +1,19 @@
+<div class="container mt-5">
+  <h2>Register</h2>
+  <form (ngSubmit)="register()">
+    <div class="mb-3">
+      <label>Kullanıcı Adı</label>
+      <input class="form-control" [(ngModel)]="model.userName" name="userName" required>
+    </div>
+    <div class="mb-3">
+      <label>Email</label>
+      <input class="form-control" [(ngModel)]="model.email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label>Şifre</label>
+      <input type="password" class="form-control" [(ngModel)]="model.password" name="password" required>
+    </div>
+    <button class="btn btn-primary" type="submit">Kayıt Ol</button>
+  </form>
+  <div *ngIf="message" class="mt-3 alert alert-info">{{ message }}</div>
+</div>

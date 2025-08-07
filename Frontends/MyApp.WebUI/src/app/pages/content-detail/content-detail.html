@@ -1,0 +1,31 @@
+<div class="container mt-4" *ngIf="content">
+  <h2>{{ content?.title }}</h2>
+  <p class="text-muted">
+    Kategori: {{ content?.categoryName }} | Yazar: {{ content?.userName }} |
+    {{ content?.createdAt | date:'short' }}
+  </p>
+  <hr>
+  <p>{{ content?.body }}</p>
+
+  <hr>
+  <h4>Yorumlar</h4>
+
+  <div class="mb-3">
+    <textarea [(ngModel)]="newComment" class="form-control" rows="2" placeholder="Yorumunuzu yazın..."></textarea>
+    <button class="btn btn-primary mt-2" (click)="addComment()">Yorum Ekle</button>
+  </div>
+
+  @if (comments.length > 0) {
+  @for (comment of comments; track comment.id) {
+  <div class="border rounded p-2 mb-2">
+    <p>{{ comment.text }}</p>
+    <small class="text-muted">{{ comment.createdAt | date:'short' }}</small>
+    <button class="btn btn-sm btn-danger float-end" (click)="deleteComment(comment.id)">Sil</button>
+  </div>
+  }
+  } @else {
+  <p>Henüz yorum yapılmamış.</p>
+  }
+
+  <button class="btn btn-secondary mt-3" (click)="goBack()">Geri Dön</button>
+</div>

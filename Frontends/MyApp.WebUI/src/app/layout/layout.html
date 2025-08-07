@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-secondary bg-secondary text-white">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">MyApp</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link " routerLink="/contents">Tüm Contentler</a></li>
+        <li class="nav-item" *ngIf="isLoggedIn"><a class="nav-link" routerLink="/my-contents">Benim Contentlerim</a>
+        </li>
+
+        <li class="nav-item" *ngIf="!isLoggedIn"><a class="nav-link" routerLink="/login">Giriş Yap</a></li>
+        <li class="nav-item" *ngIf="!isLoggedIn"><a class="nav-link" routerLink="/register">Kayıt Ol</a></li>
+        <li class="nav-item" *ngIf="isAuthenticated()">
+          <a class="nav-link" routerLink="/contents/add">İçerik Ekle</a>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLoggedIn">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            {{ username }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" (click)="logout()">Çıkış Yap</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <router-outlet></router-outlet>
+</div>

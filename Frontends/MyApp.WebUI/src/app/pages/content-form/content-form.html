@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">
+    {{ isEditMode ? 'İçerik Düzenle' : 'Yeni İçerik Ekle' }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="mb-3">
+      <label class="form-label">Başlık</label>
+      <input type="text" class="form-control" formControlName="title">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Açıklama</label>
+      <textarea class="form-control" rows="4" formControlName="body"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Kategori Seç</label>
+      <select class="form-select" formControlName="categoryId">
+        <option value="">Kategori Seçiniz</option>
+        @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">
+      {{ isEditMode ? 'Güncelle' : 'Kaydet' }}
+    </button>
+    <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">İptal</button>
+  </form>
+</div>
