@@ -15,12 +15,10 @@ namespace MyApp.Application.Features.CQRS.Handlers.ContentVoteHandlers
     public class CreateContentVoteCommandHandler : IRequestHandler<CreateContentVoteCommand, Unit>
     {
         private readonly IRepository<ContentVote> _repository;
-        private readonly IRepository<Content> _contentRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CreateContentVoteCommandHandler(IRepository<ContentVote> repository, IRepository<Content> contentRepository, IHttpContextAccessor httpContextAccessor)
+        public CreateContentVoteCommandHandler(IRepository<ContentVote> repository, IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
-            _contentRepository = contentRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -29,27 +27,27 @@ namespace MyApp.Application.Features.CQRS.Handlers.ContentVoteHandlers
         {
             var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (!int.TryParse(userIdClaim, out var userIdFromToken) || userIdFromToken <= 0)
+            if (!int.TryParse(userIdClaim, out var userId) || userId <= 0)
             {
                 throw new UnauthorizedAccessException("Geçersiz kullanıcı kimliği.");
             }
 
-            var existingVote = await _repository.GetByFilterAsync(x =>
-                x.UserId == userIdFromToken && x.ContentId == request.ContentId);
+            var existingVote = await _repository.GetByFilterAsync(v =>
+                v.UserId == userId && v.ContentId == request.ContentId);
 
-            if (existingVote == null)
+            if (existingVote != null)
+            {
+                existingVote.IsLike = request.IsLike;
+                await _repository.UpdateAsync(existingVote);
+            }
+            else
             {
                 await _repository.CreateAsync(new ContentVote
                 {
                     ContentId = request.ContentId,
-                    UserId = userIdFromToken,
+                    UserId = userId,
                     IsLike = request.IsLike
                 });
-            }
-            else
-            {
-                existingVote.IsLike = request.IsLike;
-                await _repository.UpdateAsync(existingVote);
             }
 
             return Unit.Value;

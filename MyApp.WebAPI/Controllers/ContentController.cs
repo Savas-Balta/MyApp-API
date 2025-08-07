@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyApp.Application.Features.CQRS.Commands.Content;
 using MyApp.Application.Features.CQRS.Commands.ContentVoteCommands;
 using MyApp.Application.Features.CQRS.Queries.Content;
+using MyApp.Application.Features.CQRS.Queries.ContentQueries;
 
 namespace MyApp.WebAPI.Controllers
 {
@@ -56,6 +57,29 @@ namespace MyApp.WebAPI.Controllers
             return Ok(new { message = "Content deleted successfully" });
         }
 
-        
+        [HttpGet("MyContents")]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetMyContents()
+        {
+            var result = await _mediator.Send(new GetMyContentsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("PublicContents")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPublicContents()
+        {
+            var result = await _mediator.Send(new GetPublicContentsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("PublicContent/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPublicContentById(int id)
+        {
+            var result = await _mediator.Send(new GetPublicContentByIdQuery(id));
+            return Ok(result);
+        }
+
     }
 }

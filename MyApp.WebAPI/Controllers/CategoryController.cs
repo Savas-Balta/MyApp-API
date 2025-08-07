@@ -19,6 +19,7 @@ namespace MyApp.WebAPI.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> CategoryList()
         {
             var result = await _mediator.Send(new GetCategoryQuery());

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MyApp.Application.Dtos.ContentDtos;
-using MyApp.Application.Features.CQRS.Queries.Content;
+using MyApp.Application.Features.CQRS.Queries.ContentQueries;
 using MyApp.Application.Features.CQRS.Results.Content;
 using MyApp.Application.Interfaces;
 using MyApp.Domain.Entities;
@@ -12,17 +12,18 @@ using System.Threading.Tasks;
 
 namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
-    public class GetContentQueryHandler : IRequestHandler<GetContentQuery, List<ContentDto>>
+    public class GetPublicContentByIdQueryHandler : IRequestHandler<GetPublicContentByIdQuery, ContentDto?>
     {
         private readonly IContentRepository _repository;
-        public GetContentQueryHandler(IContentRepository repository)
+
+        public GetPublicContentByIdQueryHandler(IContentRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<List<ContentDto>> Handle(GetContentQuery request, CancellationToken cancellationToken)
+        public async Task<ContentDto?> Handle(GetPublicContentByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetAllContentsWithCategoryAndUserAsync();
+            return await _repository.GetPublicContentByIdAsync(request.Id);
         }
     }
 }

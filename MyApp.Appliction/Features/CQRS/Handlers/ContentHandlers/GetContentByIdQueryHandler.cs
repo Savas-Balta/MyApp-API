@@ -13,26 +13,16 @@ namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     public class GetContentByIdQueryHandler : IRequestHandler<GetContentByIdQuery, GetContentByIdQueryResult>
     {
-        private readonly IRepository<Content> _repository;
+        private readonly IContentRepository _repository;
 
-        public GetContentByIdQueryHandler(IRepository<Content> repository)
+        public GetContentByIdQueryHandler(IContentRepository repository)
         {
             _repository = repository;
         }
 
         public async Task<GetContentByIdQueryResult> Handle(GetContentByIdQuery request, CancellationToken cancellationToken)
         {
-            var value = await _repository.GetByIdAsync(request.Id);
-            return new GetContentByIdQueryResult
-            {
-                Id = value.Id,
-                Title = value.Title,
-                Body = value.Body,
-                UserId = value.UserId,
-                CategoryId = value.CategoryId,
-                IsDeleted = value.IsDeleted,
-                CreatedAt = value.CreatedAt
-            };
+            return await _repository.GetContentWithCategoryAndUserByIdAsync(request.Id);
         }
     }
 }

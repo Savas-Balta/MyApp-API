@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyApp.Application.Dtos
+namespace MyApp.Application.Dtos.AuthDtos
 {
     public class RegisterDto
     {

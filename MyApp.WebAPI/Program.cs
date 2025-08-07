@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://*:80");
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
@@ -85,6 +86,18 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,8 +109,10 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<MyAppDbContext>();
-    db.Database.Migrate(); // <-- burasý migration'larý uygular
+    db.Database.Migrate();
 }
+
+app.UseCors("AllowAngular");
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
