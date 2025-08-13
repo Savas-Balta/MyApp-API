@@ -1,10 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MyApp.Application.Features.CQRS.Commands.CommentCommands;
-using MyApp.Application.Features.CQRS.Queries.CommentQueries;
-
+﻿
 namespace MyApp.WebAPI.Controllers
 {
     [Authorize]

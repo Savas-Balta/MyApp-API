@@ -1,0 +1,9 @@
+﻿global using FluentAssertions;
+global using Moq;
+global using MyApp.Application.Features.CQRS.Handlers.CategoryHandlers;
+global using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
+global using MyApp.Application.Interfaces;
+global using MyApp.Domain.Entities;
+global using Xunit;
+global using MyApp.Application.Features.CQRS.Handlers.UserHandlers;
+global using MyApp.Application.Features.CQRS.Queries.UserQueries;

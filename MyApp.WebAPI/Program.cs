@@ -1,18 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using MyApp.Application.Features.CQRS.Handlers.ContentHandlers;
-using MyApp.Application.Interfaces;
-using MyApp.Persistence.Context;
-using MyApp.Persistence.Repositories;
-using System.Reflection;
-using MyApp.Application;
-using MyApp.Persistence.Security;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using MyApp.WebAPI.Middleware;
-
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://*:80");

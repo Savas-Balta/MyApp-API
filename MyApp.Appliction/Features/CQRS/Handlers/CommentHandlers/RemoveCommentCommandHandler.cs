@@ -1,15 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using MyApp.Application.Features.CQRS.Commands.CommentCommands;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Application.Features.CQRS.Handlers.CommentHandlers
 {
     public class RemoveCommentCommandHandler : IRequestHandler<RemoveCommentCommand, Unit>

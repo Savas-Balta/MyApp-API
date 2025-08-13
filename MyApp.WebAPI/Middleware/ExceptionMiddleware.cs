@@ -1,7 +1,4 @@
 ﻿
-using System.Net;
-using System.Text.Json;
-
 namespace MyApp.WebAPI.Middleware
 {
     public class ExceptionMiddleware

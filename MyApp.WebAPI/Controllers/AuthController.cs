@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyApp.Application.Dtos.AuthDtos;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using MyApp.Persistence.Context;
-
+﻿
 namespace MyApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]

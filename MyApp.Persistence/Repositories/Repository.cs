@@ -1,14 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using MyApp.Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Persistence.Repositories
 {
     public class Repository<T>(MyAppDbContext context) : IRepository<T> where T : class

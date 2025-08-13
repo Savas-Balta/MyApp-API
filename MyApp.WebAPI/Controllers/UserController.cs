@@ -1,12 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MyApp.Application.Features.CQRS.Commands.CategoryCommends;
-using MyApp.Application.Features.CQRS.Commands.UserCommands;
-using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
-using MyApp.Application.Features.CQRS.Queries.UserQueries;
-
+﻿
 namespace MyApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]

@@ -1,0 +1,27 @@
+﻿global using System.Linq.Expressions;
+global using System.Security.Claims;
+
+global using Microsoft.AspNetCore.Http;
+
+global using MediatR;
+global using MyApp.Application.Interfaces;
+global using MyApp.Application.Features.CQRS.Commands.CategoryCommends;
+global using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
+global using MyApp.Application.Features.CQRS.Results.CategoryResults;
+global using MyApp.Application.Features.CQRS.Commands.CommentCommands;
+global using MyApp.Application.Features.CQRS.Queries.CommentQueries;
+global using MyApp.Application.Features.CQRS.Results.CommentResults;
+global using MyApp.Application.Features.CQRS.Commands.Content;
+global using MyApp.Application.Features.CQRS.Queries.Content;
+global using MyApp.Application.Features.CQRS.Results.Content;
+global using MyApp.Application.Features.CQRS.Queries.ContentQueries;
+global using MyApp.Application.Features.CQRS.Commands.ContentVoteCommands;
+global using MyApp.Application.Features.CQRS.Queries.ContentVoteQueries;
+global using MyApp.Application.Features.CQRS.Results.ContentVoteResults;
+global using MyApp.Application.Features.CQRS.Queries.UserQueries;
+global using MyApp.Application.Features.CQRS.Results.UserResults;
+global using MyApp.Application.Features.CQRS.Commands.UserCommands;
+
+global using MyApp.Domain.Entities;
+global using MyApp.Application.Dtos.ContentDtos;
+

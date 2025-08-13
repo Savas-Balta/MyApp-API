@@ -1,14 +1,4 @@
-﻿using MediatR;
-using MyApp.Application.Features.CQRS.Queries.CommentQueries;
-using MyApp.Application.Features.CQRS.Results.CommentResults;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Application.Features.CQRS.Handlers.CommentHandlers
 {
     public class GetCommentsByContentIdQueryHandler : IRequestHandler<GetCommentsByContentIdQuery, List<GetCommentQueryResult>>

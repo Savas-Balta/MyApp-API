@@ -1,14 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyApp.Application.Dtos.ContentDtos;
-using MyApp.Application.Features.CQRS.Results.Content;
-using MyApp.Application.Interfaces;
-using MyApp.Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Persistence.Repositories
 {
     public class ContentRepository : IContentRepository

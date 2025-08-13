@@ -1,0 +1,28 @@
+﻿global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using MyApp.Application.Dtos.AuthDtos;
+global using MyApp.Application.Interfaces;
+global using MyApp.Domain.Entities;
+global using MyApp.Persistence.Context;
+global using MediatR;
+global using Microsoft.AspNetCore.Authorization;
+global using MyApp.Application.Features.CQRS.Commands.CategoryCommends;
+global using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
+global using MyApp.Application.Features.CQRS.Commands.CommentCommands;
+global using MyApp.Application.Features.CQRS.Queries.CommentQueries;
+global using MyApp.Application.Features.CQRS.Commands.Content;
+global using MyApp.Application.Features.CQRS.Commands.ContentVoteCommands;
+global using MyApp.Application.Features.CQRS.Queries.Content;
+global using MyApp.Application.Features.CQRS.Queries.ContentQueries;
+global using MyApp.Application.Features.CQRS.Queries.ContentVoteQueries;
+global using MyApp.Application.Features.CQRS.Queries.UserQueries;
+global using MyApp.Application.Features.CQRS.Commands.UserCommands;
+global using System.Net;
+global using System.Text.Json;
+global using MyApp.WebAPI.Middleware;
+global using MyApp.Persistence.Security;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Text;
+global using MyApp.Persistence.Repositories;
+
+

@@ -1,0 +1,16 @@
+﻿global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using MyApp.Domain.Entities;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using MyApp.Persistence.Context;
+global using MyApp.Application.Dtos.ContentDtos;
+global using MyApp.Application.Features.CQRS.Results.Content;
+global using MyApp.Application.Interfaces;
+global using System.Linq.Expressions;
+global using System.Security.Claims;
+global using System.Text;
+global using System.IdentityModel.Tokens.Jwt;
+global using Microsoft.Extensions.Options;
+global using Microsoft.IdentityModel.Tokens;

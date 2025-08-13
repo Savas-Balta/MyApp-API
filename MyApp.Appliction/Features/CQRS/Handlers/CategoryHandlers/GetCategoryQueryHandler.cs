@@ -1,14 +1,4 @@
-﻿using MediatR;
-using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
-using MyApp.Application.Features.CQRS.Results.CategoryResults;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Application.Features.CQRS.Handlers.CategoryHandlers
 {
     public class GetCategoryQueryHandler : IRequestHandler<GetCategoryQuery, List<GetCategoryQueryResult>>

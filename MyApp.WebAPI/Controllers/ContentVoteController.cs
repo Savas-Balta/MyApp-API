@@ -1,10 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MyApp.Application.Features.CQRS.Commands.ContentVoteCommands;
-using MyApp.Application.Features.CQRS.Queries.ContentVoteQueries;
-
+﻿
 namespace MyApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]

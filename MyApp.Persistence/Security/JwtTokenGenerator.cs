@@ -1,15 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using MyApp.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Runtime;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MyApp.Persistence.Security
 {
     public class JwtTokenGenerator : IJwtTokenGenerator

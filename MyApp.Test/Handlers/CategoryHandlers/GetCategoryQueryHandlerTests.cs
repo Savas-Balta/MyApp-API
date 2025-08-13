@@ -1,11 +1,4 @@
-﻿using FluentAssertions;
-using Moq;
-using MyApp.Application.Features.CQRS.Handlers.CategoryHandlers;
-using MyApp.Application.Features.CQRS.Queries.CategoryQueries;
-using MyApp.Application.Interfaces;
-using MyApp.Domain.Entities;
-using Xunit;
-
+﻿
 namespace MyApp.Test.Handlers.CategoryHandlers
 {
     public class GetCategoryQueryHandlerTests
