@@ -27,4 +27,7 @@ global using System.Reflection.Metadata;
 global using Serilog;
 global using Microsoft.AspNetCore.Diagnostics;
 global using FluentValidation;
+global using MyApp.Application.Mapper;
+global using MyApp.Persistence.Interceptors;
+global using MyApp.Persistence.Services;
 

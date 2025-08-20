@@ -1,7 +1,4 @@
-﻿
-using MyApp.Application.Common.Caching;
-
-namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
+﻿namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     
     public class UpdateContentCommandHandler : IRequestHandler<UpdateContentCommand, Unit>
@@ -9,11 +6,13 @@ namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
         private readonly IRepository<Content> _repository;
         private readonly ICacheService _cacheService;
         private readonly ICurrentUserService _currentUser;
-        public UpdateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor, ICacheService cacheService, ICurrentUserService currentUser)
+        private readonly IMapper _mapper;
+        public UpdateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor, ICacheService cacheService, ICurrentUserService currentUser, IMapper mapper)
         {
             _repository = repository;
             _cacheService = cacheService;
             _currentUser = currentUser;
+            _mapper = mapper;
         }
         public async Task<Unit> Handle(UpdateContentCommand request, CancellationToken cancellationToken)
         {
@@ -27,9 +26,7 @@ namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
             if (entity.UserId != userId)
                 throw new UnauthorizedAccessException("Bu içeriği güncellemeye yetkiniz yok.");
 
-            entity.Title = request.Title;
-            entity.Body = request.Body;
-            entity.CategoryId = request.CategoryId;
+            _mapper.Map(request, entity);
             await _repository.UpdateAsync(entity);
 
             await _cacheService.RemoveAsync(CacheKeys.ContentsAll, cancellationToken);

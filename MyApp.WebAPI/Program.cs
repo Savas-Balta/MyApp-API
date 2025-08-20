@@ -1,6 +1,3 @@
-using MyApp.Persistence.Interceptors;
-using MyApp.Persistence.Services;
-
 Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .WriteTo.Console()
@@ -31,17 +28,19 @@ builder.Services.AddMediatR(cfg =>
     ));
 
 
-
 builder.Services.AddDbContext<MyAppDbContext>((sp, options) =>
     options
         .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
+
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
     options.InstanceName = "myapp:";
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

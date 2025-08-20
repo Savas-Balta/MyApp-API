@@ -1,7 +1,4 @@
-﻿
-using MyApp.Application.Common.Caching;
-
-namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
+﻿namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     public class RemoveContentCommandHandler : IRequestHandler<RemoveContentCommand, Unit>
     {

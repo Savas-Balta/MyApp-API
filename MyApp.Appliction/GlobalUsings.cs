@@ -22,4 +22,5 @@ global using MyApp.Application.Features.CQRS.Commands.UserCommands;
 global using MyApp.Application.Common.Caching;
 global using MyApp.Domain.Entities;
 global using MyApp.Application.Dtos.ContentDtos;
+global using AutoMapper;
 
