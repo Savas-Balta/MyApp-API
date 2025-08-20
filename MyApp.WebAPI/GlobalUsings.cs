@@ -19,10 +19,12 @@ global using MyApp.Application.Features.CQRS.Queries.UserQueries;
 global using MyApp.Application.Features.CQRS.Commands.UserCommands;
 global using System.Net;
 global using System.Text.Json;
-global using MyApp.WebAPI.Middleware;
 global using MyApp.Persistence.Security;
 global using Microsoft.IdentityModel.Tokens;
 global using System.Text;
 global using MyApp.Persistence.Repositories;
-
+global using System.Reflection.Metadata;
+global using Serilog;
+global using Microsoft.AspNetCore.Diagnostics;
+global using FluentValidation;
 

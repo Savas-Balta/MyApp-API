@@ -1,8 +1,6 @@
 ﻿global using System.Linq.Expressions;
 global using System.Security.Claims;
-
 global using Microsoft.AspNetCore.Http;
-
 global using MediatR;
 global using MyApp.Application.Interfaces;
 global using MyApp.Application.Features.CQRS.Commands.CategoryCommends;
@@ -21,7 +19,7 @@ global using MyApp.Application.Features.CQRS.Results.ContentVoteResults;
 global using MyApp.Application.Features.CQRS.Queries.UserQueries;
 global using MyApp.Application.Features.CQRS.Results.UserResults;
 global using MyApp.Application.Features.CQRS.Commands.UserCommands;
-
+global using MyApp.Application.Common.Caching;
 global using MyApp.Domain.Entities;
 global using MyApp.Application.Dtos.ContentDtos;
 

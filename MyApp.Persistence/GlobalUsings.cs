@@ -14,3 +14,6 @@ global using System.Text;
 global using System.IdentityModel.Tokens.Jwt;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Caching.Distributed;
+global using System.Text.Json;

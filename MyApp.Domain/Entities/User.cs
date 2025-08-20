@@ -1,7 +1,6 @@
-﻿
-namespace MyApp.Domain.Entities
+﻿namespace MyApp.Domain.Entities
 {
-    public class User
+    public class User : BaseAuditableEntity
     {
         public int Id { get; set; }
         public string UserName { get; set; } = string.Empty;

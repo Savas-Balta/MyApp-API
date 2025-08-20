@@ -1,20 +1,47 @@
+using MyApp.Persistence.Interceptors;
+using MyApp.Persistence.Services;
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger(); 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 builder.WebHost.UseUrls("http://*:80");
+
+builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IContentRepository, ContentRepository>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<AuditSaveChangesInterceptor>();
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly));
+    cfg.RegisterServicesFromAssemblies(
+        typeof(MyApp.Application.AssemblyReference).Assembly, 
+        typeof(Program).Assembly                              
+    ));
 
 
-builder.Services.AddDbContext<MyAppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddDbContext<MyAppDbContext>((sp, options) =>
+    options
+        .UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "myapp:";
+});
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
@@ -85,12 +112,49 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var feature = context.Features.Get<IExceptionHandlerFeature>();
+        var ex = feature?.Error;
+
+        // >>> EKLE: gerçek hatayý logla
+        Serilog.Log.Error(ex, "Unhandled error on {Path}. traceId={TraceId}", context.Request.Path, context.TraceIdentifier);
+
+
+        var status = ex switch
+        {
+            ValidationException => StatusCodes.Status400BadRequest,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            KeyNotFoundException => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        context.Response.StatusCode = status;
+
+        await Results.Problem(
+            title: "An error occurred",
+#if DEBUG
+            detail: ex?.ToString(), // debug'ta stacktrace de gelsin
+#else
+            detail: ex?.Message,
+#endif
+            statusCode: status,
+            extensions: new Dictionary<string, object?> { ["traceId"] = context.TraceIdentifier }
+        ).ExecuteAsync(context);
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<MyAppDbContext>();
@@ -98,7 +162,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseCors("AllowAngular");
-app.UseMiddleware<ExceptionMiddleware>();
+
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
@@ -106,5 +172,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();

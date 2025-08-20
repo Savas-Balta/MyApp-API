@@ -1,5 +1,4 @@
-﻿
-namespace MyApp.Persistence.Context
+﻿namespace MyApp.Persistence.Context
 {
     public class MyAppDbContext : DbContext
     {
@@ -20,6 +19,18 @@ namespace MyApp.Persistence.Context
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(MyAppDbContext).Assembly);
 
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseAuditableEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    var p = Expression.Parameter(entityType.ClrType, "e");
+                    var body = Expression.Equal(
+                        Expression.Property(p, nameof(BaseAuditableEntity.IsDeleted)),
+                        Expression.Constant(false));
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(Expression.Lambda(body, p));
+                }
+            }
+
             modelBuilder.Entity<Content>().HasQueryFilter(c => !c.IsDeleted);
             modelBuilder.Entity<ContentVote>()
                 .HasIndex(v => new { v.UserId, v.ContentId })
@@ -28,12 +39,14 @@ namespace MyApp.Persistence.Context
             modelBuilder.Entity<ContentVote>()
                 .HasOne(v => v.User)
                 .WithMany(u => u.Votes)
-                .HasForeignKey(v => v.UserId);
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ContentVote>()
                 .HasOne(v => v.Content)
                 .WithMany(c => c.Votes)
-                .HasForeignKey(v => v.ContentId);
+                .HasForeignKey(v => v.ContentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             base.OnModelCreating(modelBuilder);

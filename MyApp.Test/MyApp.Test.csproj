@@ -22,4 +22,8 @@
     <ProjectReference Include="..\MyApp.Persistence\MyApp.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\CategoryHandlers\" />
+  </ItemGroup>
+
 </Project>

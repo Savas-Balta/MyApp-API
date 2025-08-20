@@ -1,35 +1,41 @@
 ﻿
+using MyApp.Application.Common.Caching;
+
 namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     
     public class UpdateContentCommandHandler : IRequestHandler<UpdateContentCommand, Unit>
     {
         private readonly IRepository<Content> _repository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public UpdateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor)
+        private readonly ICacheService _cacheService;
+        private readonly ICurrentUserService _currentUser;
+        public UpdateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor, ICacheService cacheService, ICurrentUserService currentUser)
         {
             _repository = repository;
-            _httpContextAccessor = httpContextAccessor;
+            _cacheService = cacheService;
+            _currentUser = currentUser;
         }
         public async Task<Unit> Handle(UpdateContentCommand request, CancellationToken cancellationToken)
         {
-            var userIdFromToken = int.Parse(
-            _httpContextAccessor.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"
-        );
+            var userId = _currentUser.GetUserId()
+             ?? throw new UnauthorizedAccessException("Geçersiz kullanıcı kimliği.");
 
-            var value = await _repository.GetByIdAsync(request.Id);
-            if (value == null)
+            var entity = await _repository.GetByIdAsync(request.Id);
+            if (entity is null)
                 throw new KeyNotFoundException("İçerik bulunamadı.");
 
-            if (value.UserId != userIdFromToken)
+            if (entity.UserId != userId)
                 throw new UnauthorizedAccessException("Bu içeriği güncellemeye yetkiniz yok.");
 
-            value.Body = request.Body;
-            value.Title = request.Title;
-            value.CategoryId = request.CategoryId;
-            value.IsDeleted = request.IsDeleted;
-            value.CreatedAt = request.CreatedAt;
-            await _repository.UpdateAsync(value);
+            entity.Title = request.Title;
+            entity.Body = request.Body;
+            entity.CategoryId = request.CategoryId;
+            await _repository.UpdateAsync(entity);
+
+            await _cacheService.RemoveAsync(CacheKeys.ContentsAll, cancellationToken);
+            await _cacheService.RemoveAsync(CacheKeys.ContentById(entity.Id), cancellationToken);
+            await _cacheService.RemoveAsync(CacheKeys.UserContents(userId), cancellationToken);
+
             return Unit.Value;
         }
     }

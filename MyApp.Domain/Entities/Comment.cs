@@ -1,7 +1,6 @@
-﻿
-namespace MyApp.Domain.Entities
+﻿namespace MyApp.Domain.Entities
 {
-    public class Comment
+    public class Comment: BaseAuditableEntity
     {
         public int Id { get; set; }
 

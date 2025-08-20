@@ -1,7 +1,6 @@
-﻿
-namespace MyApp.Domain.Entities
+﻿namespace MyApp.Domain.Entities
 {
-    public class Content
+    public class Content : BaseAuditableEntity
     {
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;

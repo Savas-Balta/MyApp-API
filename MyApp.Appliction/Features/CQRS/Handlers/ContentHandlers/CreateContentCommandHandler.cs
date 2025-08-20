@@ -1,35 +1,36 @@
 ﻿
+using MyApp.Application.Common.Caching;
+
 namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     public class CreateContentCommandHandler : IRequestHandler<CreateContentCommand, Unit>
     {
         private readonly IRepository<Content> _repository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICacheService _cacheService;
+        private readonly ICurrentUserService _currentUser;
 
-        public CreateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor)
+        public CreateContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor, ICacheService cacheService, ICurrentUserService currentUser)
         {
             _repository = repository;
-            _httpContextAccessor = httpContextAccessor;
+            _cacheService = cacheService;
+            _currentUser = currentUser;
         }
         public async Task<Unit> Handle(CreateContentCommand request, CancellationToken cancellationToken)
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+           var userId = _currentUser.GetUserId()
+                ?? throw new UnauthorizedAccessException("Geçersiz kullanıcı kimliği.");
 
-            if (!int.TryParse(userIdClaim, out var userIdFromToken) || userIdFromToken <= 0)
-            {
-                throw new UnauthorizedAccessException("Geçersiz kullanıcı kimliği.");
-            }
-
-
-            await _repository.CreateAsync(new Content
+            var entity = new Content
             {
                 Title = request.Title,
                 Body = request.Body,
-                UserId = userIdFromToken,
                 CategoryId = request.CategoryId,
-                IsDeleted = false, 
-                CreatedAt = DateTime.UtcNow 
-            });
+                UserId = userId
+            };
+
+            await _repository.CreateAsync(entity);
+            await _cacheService.RemoveAsync(CacheKeys.ContentsAll,cancellationToken);
+            await _cacheService.RemoveAsync(CacheKeys.UserContents(userId), cancellationToken);
 
             return Unit.Value;
         }

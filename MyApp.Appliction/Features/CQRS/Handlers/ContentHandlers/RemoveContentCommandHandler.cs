@@ -1,35 +1,43 @@
 ﻿
+using MyApp.Application.Common.Caching;
+
 namespace MyApp.Application.Features.CQRS.Handlers.ContentHandlers
 {
     public class RemoveContentCommandHandler : IRequestHandler<RemoveContentCommand, Unit>
     {
         private readonly IRepository<Content> _repository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICacheService _cacheService;
+        private readonly ICurrentUserService _currentUser;
 
-        public RemoveContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor)
+        public RemoveContentCommandHandler(IRepository<Content> repository, IHttpContextAccessor httpContextAccessor, ICacheService cacheService, ICurrentUserService currentUser)
         {
             _repository = repository;
-            _httpContextAccessor = httpContextAccessor;
+            _cacheService = cacheService;
+            _currentUser = currentUser;
         }
 
         public async Task<Unit> Handle(RemoveContentCommand request, CancellationToken cancellationToken)
         {
-            var userIdFromToken = int.Parse(
-                _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0"
-            );
+            var userId = _currentUser.GetUserId()
+            ?? throw new UnauthorizedAccessException("Geçersiz kullanıcı kimliği.");
 
-            var value = await _repository.GetByIdAsync(request.Id);
-
-            if (value == null)
+            var entity = await _repository.GetByIdAsync(request.Id);
+            if (entity is null)
                 throw new KeyNotFoundException("İçerik bulunamadı.");
 
-            if (value.UserId != userIdFromToken)
+            if (entity.UserId != userId)
                 throw new UnauthorizedAccessException("Bu içeriği silmeye yetkiniz yok.");
 
-            
-            value.IsDeleted = true;
-            await _repository.UpdateAsync(value);
 
+            if (!entity.IsDeleted)                 
+            {
+                entity.IsDeleted = true;   
+                await _repository.UpdateAsync(entity);
+            }
+
+            await _cacheService.RemoveAsync(CacheKeys.ContentsAll, cancellationToken);
+            await _cacheService.RemoveAsync(CacheKeys.ContentById(entity.Id), cancellationToken);
+            await _cacheService.RemoveAsync(CacheKeys.UserContents(userId), cancellationToken);
             return Unit.Value;
         }
     }
